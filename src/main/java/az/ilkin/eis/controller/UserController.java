@@ -40,16 +40,16 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(request));
     }
 
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Istifadecini yenile")
     public ResponseEntity<UserResponse>updateUser(@PathVariable Long id, @Valid @RequestBody UpdateUserRequest request){
         return ResponseEntity.ok(userService.updateUser(id,request));
     }
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Istifadecini sil")
-    public ResponseEntity<UserResponse>deleteUser(@PathVariable Long id){
+    public ResponseEntity<Void>deleteUser(@PathVariable Long id){
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }

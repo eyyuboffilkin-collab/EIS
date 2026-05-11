@@ -26,7 +26,7 @@ public class StudentExamController {
     private final StudentExamService studentExamService;
 
    @PostMapping("/{examId}/start")
-   @PreAuthorize("hasRole('STUDENT)'")
+   @PreAuthorize("hasRole('STUDENT')")
    @Operation(summary = "Imtahani baslat")
     public ResponseEntity<ExamResultResponse>startExam(
             @PathVariable Long examId,

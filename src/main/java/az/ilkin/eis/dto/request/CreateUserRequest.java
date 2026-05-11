@@ -3,6 +3,7 @@ package az.ilkin.eis.dto.request;
 import az.ilkin.eis.enums.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
@@ -18,7 +19,7 @@ public class CreateUserRequest {
     @NotBlank(message = "Sifre bos ola bilmez")
     private String password;
 
-    @NotBlank(message = "Rol secilmelidir")
+    @NotNull(message = "Rol secilmelidir")
     private Role role;
 
 }
