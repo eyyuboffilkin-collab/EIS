@@ -57,7 +57,7 @@ public class StudentExamController {
 
 
     @GetMapping("/{examId}/result")
-    @PreAuthorize("/hasRole('STUDENT')")
+    @PreAuthorize("hasRole('STUDENT')")
     @Operation(summary = "Oz neticeme bax")
     public ResponseEntity<ExamResultResponse>getMyResult(
             @PathVariable Long examId,

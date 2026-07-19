@@ -6,7 +6,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-public class EisApplication {
+public class  EisApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(EisApplication.class, args);
