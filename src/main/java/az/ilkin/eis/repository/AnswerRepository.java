@@ -12,16 +12,21 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface AnswerRepository extends JpaRepository<Answer,Long> {
-    Optional<Answer>findByExamResultAndQuestion(ExamResult examResult, Question question);
+public interface AnswerRepository extends JpaRepository<Answer, Long> {
+    Optional<Answer> findByExamResultAndQuestion(ExamResult examResult, Question question);
 
-    List<Answer>findByExamResult(ExamResult examResult);
+    List<Answer> findByExamResult(ExamResult examResult);
 
     @Query(value = "SELECT a FROM Answer a WHERE a.examResult.exam.id = :examId " +
             "AND a.question.type = 'OPEN' AND a.graded = false")
-    List<Answer>findUngradedOpenAnswersByExamId(@Param("examId") Long examId);
+    List<Answer> findUngradedOpenAnswersByExamId(@Param("examId") Long examId);
 
     @Query("SELECT a FROM Answer a WHERE a.examResult.exam.id = :examId " +
             "AND a.question.type = 'OPEN'")
-    List<Answer>findOpenAnswersByExamId(@Param("examId")Long examId);
+    List<Answer> findOpenAnswersByExamId(@Param("examId") Long examId);
+
+    boolean existsByQuestion(Question question);
+
 }
+
+

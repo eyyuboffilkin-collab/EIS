@@ -1,5 +1,6 @@
 package az.ilkin.eis.exception;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -33,6 +34,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<Map<String, Object>> handleAccessDenied(AccessDeniedException ex) {
         return buildError(HttpStatus.FORBIDDEN, "Bu əməliyyat üçün icazəniz yoxdur");
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Map<String, Object>> handleDataIntegrity(DataIntegrityViolationException ex) {
+        return buildError(HttpStatus.CONFLICT,
+                "Bu emeliyyat yerine yetirile bilmedi, cunki bu qeyd basqa melumatlarla elaqelidir. " +
+                        "Evvelce elaqeli qeydleri silin ve ya ayirin.");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

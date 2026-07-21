@@ -8,6 +8,8 @@ import az.ilkin.eis.enums.QuestionType;
 import az.ilkin.eis.exception.BadRequestException;
 import az.ilkin.eis.exception.ForbiddenException;
 import az.ilkin.eis.exception.ResourceNotFoundException;
+import az.ilkin.eis.repository.AnswerRepository;
+import az.ilkin.eis.repository.ExamRepository;
 import az.ilkin.eis.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,8 @@ import java.util.stream.Collectors;
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
+    private final ExamRepository examRepository;
+    private final AnswerRepository answerRepository;
 
     //muellimin oz suallari
     public List<QuestionResponse> getMyQuestions(User teacher) {
@@ -88,6 +92,16 @@ public class QuestionService {
 
         if (!question.getCreatedBy().getId().equals(teacher.getId())) {
             throw new ForbiddenException("Bu sual size mexsus deyil");
+        }
+        if(answerRepository.existsByQuestion(question)){
+            throw new BadRequestException(
+                    "Bu suala artiq telebe cavabi verilib, silinmezden evvel netice tarixcesi qorunmalidir"
+            );
+        }
+        if(examRepository.existsByQuestionsContaining(question)){
+            throw new BadRequestException(
+                    "Bu sual bir imtahana daxil edilib, evvelce suali imtahandan cixarin"
+            );
         }
         questionRepository.delete(question);
     }

@@ -46,6 +46,14 @@ public class UserController {
     public ResponseEntity<UserResponse>updateUser(@PathVariable Long id, @Valid @RequestBody UpdateUserRequest request){
         return ResponseEntity.ok(userService.updateUser(id,request));
     }
+
+    @PostMapping("/{id}/transfer-content")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Istifadecinin imtahan/suallarini basqa muellime kocur")
+    public ResponseEntity<Void>transferContent(@PathVariable Long id, @RequestParam Long toUserId){
+        userService.transferContent(id, toUserId);
+        return ResponseEntity.noContent().build();
+    }
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Istifadecini sil")
