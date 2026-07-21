@@ -6,6 +6,7 @@ import az.ilkin.eis.dto.response.ExamResultResponse;
 import az.ilkin.eis.dto.response.UserResponse;
 import az.ilkin.eis.entity.User;
 import az.ilkin.eis.enums.ExamStatus;
+import az.ilkin.eis.repository.ClassRepository;
 import az.ilkin.eis.repository.ExamRepository;
 import az.ilkin.eis.repository.ExamResultRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class StudentService {
     private final ExamService examService;
     private final StudentExamService studentExamService;
     private final UserService userService;
+    private final ClassRepository classRepository;
 
     //Telebenin profili
     public UserResponse getProfile(User student){
@@ -32,6 +34,7 @@ public class StudentService {
     public List<ExamResponse>getActiveExams(User student){
         return examRepository.findByStatus(ExamStatus.ACTIVE)
                 .stream()
+                .filter(exam -> classRepository.existsByTeacherAndStudent(exam.getCreatedBy(),student))
                 .map(examService::toResponse)
                 .collect(Collectors.toList());
     }

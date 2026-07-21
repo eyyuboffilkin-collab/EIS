@@ -10,6 +10,7 @@ import az.ilkin.eis.enums.QuestionType;
 import az.ilkin.eis.exception.BadRequestException;
 import az.ilkin.eis.exception.ResourceNotFoundException;
 import az.ilkin.eis.repository.AnswerRepository;
+import az.ilkin.eis.repository.ClassRepository;
 import az.ilkin.eis.repository.ExamResultRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ public class StudentExamService {
     private final ExamService examService;
     private final ExamResultRepository examResultRepository;
     private final AnswerRepository answerRepository;
+    private final ClassRepository classRepository;
 
     @Transactional
     public ExamResultResponse startExam(Long examId, User student) {
@@ -179,14 +181,25 @@ public class StudentExamService {
     }
 
     public AnswerResponse toAnswerResponse(Answer answer) {
-        return AnswerResponse.builder()
+        return toAnswerResponse(answer,false);
+    }
+
+    public AnswerResponse toAnswerResponse(Answer answer, boolean reveal){
+        Question question = answer.getQuestion();
+        AnswerResponse.AnswerResponseBuilder builder = AnswerResponse.builder()
                 .id(answer.getId())
-                .questionId(answer.getQuestion().getId())
-                .questionText(answer.getQuestion().getText())
-                .questionType(answer.getQuestion().getType())
+                .questionId(question.getId())
+                .questionText(question.getText())
+                .questionType(question.getType())
                 .answerText(answer.getAnswerText())
                 .score(answer.getScore())
-                .graded(answer.isGraded())
-                .build();
+                .graded(answer.isGraded());
+
+        if(reveal && question.getType() == QuestionType.TEST){
+            builder.correctOption(question.getCorrectOption());
+            builder.correct(question.getCorrectOption() != null
+            && question.getCorrectOption().equalsIgnoreCase(answer.getAnswerText()));
+        }
+        return builder.build();
     }
 }

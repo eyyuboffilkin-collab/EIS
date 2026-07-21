@@ -21,6 +21,9 @@ public interface ClassRepository extends JpaRepository<Classroom,Long>{
     @Query("SELECT c FROM Classroom c JOIN c.students s WHERE s = :user")
     List<Classroom> findByStudentsContaining(@Param("user") User user);
 
+    @Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END FROM Classroom  c JOIN c.teachers t JOIN c.students s WHERE t = :teacher AND s = :student")
+    boolean existsByTeacherAndStudent(@Param("teacher") User teacher, @Param("student") User student);
+
 }
 
 

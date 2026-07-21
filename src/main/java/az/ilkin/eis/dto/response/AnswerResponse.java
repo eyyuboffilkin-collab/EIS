@@ -18,4 +18,8 @@ public class AnswerResponse {
    private String answerText;
    private Integer score;
    private boolean graded;
+
+   private String correctOption;
+   private Boolean correct;
+
 }
